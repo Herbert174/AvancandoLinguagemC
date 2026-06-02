@@ -1,6 +1,22 @@
 #include <stdio.h>
 #include <string.h>
 
+void abertura(){
+    printf("******************\n");
+    printf("* Jogo da forca  *\n");
+    printf("******************\n");
+}
+
+int chuta(char chutes[26], int tentativas){
+    char chute;
+    printf("\nEscolha uma letra: ");
+    scanf(" %c", &chute); //utilizar o espaço antes do %c para o codigo não rodar duplicado, ignorar o enter
+
+    chutes[tentativas] = chute;
+    tentativas++;
+    return tentativas;
+}
+
 int main(){
     char palavrasecreta[20];
     int acertou = 0;
@@ -10,6 +26,8 @@ int main(){
 
     sprintf(palavrasecreta, "MELANCIA"); //atribui uma string a um array
     //printf("%s", palavrasecreta); //%s para imprimir um array
+
+    abertura();
 
     do
     {
@@ -35,12 +53,8 @@ int main(){
         }
     printf("\n");
     
-    char chute;
-    printf("\nEscolha uma letra: ");
-    scanf(" %c", &chute); //utilizar o espaço antes do %c para o codigo não rodar duplicado ignorar o enter
-
-    chutes[tentativas] = chute;
-    tentativas++;
+    tentativas = chuta(chutes, tentativas);
+    //tentativas++;
     
     } while (!acertou && !enforcou);
     
