@@ -7,14 +7,13 @@ void abertura(){
     printf("******************\n");
 }
 
-int chuta(char chutes[26], int tentativas){
+void chuta(char chutes[26], int* tentativas){
     char chute;
     printf("\nEscolha uma letra: ");
     scanf(" %c", &chute); //utilizar o espaço antes do %c para o codigo não rodar duplicado, ignorar o enter
 
-    chutes[tentativas] = chute;
-    tentativas++;
-    return tentativas;
+    chutes[(*tentativas)] = chute;
+    (*tentativas)++;
 }
 
 int main(){
@@ -53,7 +52,7 @@ int main(){
         }
     printf("\n");
     
-    tentativas = chuta(chutes, tentativas);
+    chuta(chutes, &tentativas);
     //tentativas++;
     
     } while (!acertou && !enforcou);
