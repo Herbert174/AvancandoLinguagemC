@@ -5,3 +5,4 @@ void desenhaforca(char palavrasecreta[20], char chutes[26], int chutesdados);
 void escolhepalavrasecreta(char palavrasecreta[20]);
 int ganhou(char palavrasecreta[20], char chutes[26], int chutesdados);
 int enforcou(char palavrasecreta[20], char chutes[26], int chutesdados);
+void adicionapalavra();

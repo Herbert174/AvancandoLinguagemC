@@ -47,11 +47,49 @@ void desenhaforca(char palavrasecreta[20], char chutes[26], int chutesdados){
         }
 }
 
+void adicionapalavra(){
+    char resposta;
+    printf("Voce deseja adicionar uma nova palavra? (S/N)\n");
+    scanf(" %c", &resposta);
+
+    if(resposta == 'S'){
+        char novapalavra[20];
+        printf("Qual a nova palavra? ");
+        scanf("%s", novapalavra);
+
+        FILE* f;
+        f = fopen("palavras.txt", "r+"); //r+ para ter permissão de leitura e escrita
+
+        if(f == 0){
+            printf("Desculpe banco de dados nao disponivel\n\n");
+            exit(1);
+        }
+
+        int qntd;
+        fscanf(f, "%d", &qntd); //lê a primeira linha do arquivo e guarda na variavel
+        qntd++;
+
+        fseek(f, 0, SEEK_SET); //Posiciona o ponteiro para a posição 0 novamente
+        fprintf(f, "%d", qntd); //Substitui o antigo numero pelo atual
+
+        fseek(f, 0, SEEK_END); //Posiciona o ponteiro para o final do arquivo
+        fprintf(f, "\n%s", novapalavra); //manda quebra de linha e 
+                                         //escreve a string presente no novapalavra
+        fclose(f);
+    }                                    
+
+}
+
 void escolhepalavrasecreta(char palavrasecreta[20]){
     //sprintf(palavrasecreta, "MELANCIA"); //atribui uma string a um array
     //printf("%s", palavrasecreta); //%s para imprimir um array
     FILE* f;
-    f = fopen("palavras.txt", "r");
+    f = fopen("palavras.txt", "r"); //abre o arquivo com permissão de leitura
+
+    if(f == 0){ //retorno 0 do fopen significa erro para abrir o arquivo
+        printf("Desculpe, banco de dados nao disponivel\n\n");
+        exit(1); //exit maior que 0 para o programa
+    }
 
     int qntdpalavras;
     fscanf(f, "%d", &qntdpalavras);
@@ -109,5 +147,5 @@ int main(){
                                 //variavel em escopos diferentes
     } while (!ganhou(palavrasecreta, chutes, chutesdados) && !enforcou(palavrasecreta, chutes, chutesdados));
     
-    
+    adicionapalavra();
 }
