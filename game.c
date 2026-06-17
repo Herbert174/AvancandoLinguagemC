@@ -34,7 +34,20 @@ int jachutou(char letra, char chutes[26], int chutesdados){
     return achou;
 }
 
-void desenhaforca(char palavrasecreta[20], char chutes[26], int chutesdados){
+void desenhaforca(char palavrasecreta[TAMANHO_PALAVRA], char chutes[26], int chutesdados){
+    int erros = chuteserros(palavrasecreta, chutes, chutesdados);
+    printf("  _______      \n");
+    printf(" |/      |     \n"); //Usar aspas simples para atribuir caracter com if ternario
+    printf(" |      %c%c%c \n", (erros >= 1 ? '(' : ' '), 
+    (erros >= 1 ? '_' : ' '), (erros >= 1 ? ')' : ' '));
+    printf(" |      %c%c%c \n", (erros >= 3 ? '\\' : ' '), 
+    (erros >= 2 ? '|' : ' '), (erros >= 3 ? '/' : ' '));
+    printf(" |       %c    \n", (erros >= 2 ? '|' : ' '));
+    printf(" |      %c %c  \n", (erros >= 4 ? '/' : ' '), (erros >= 4 ? '\\' : ' '));
+    printf(" |             \n");
+    printf("_|___          \n");
+    printf("\n\n");
+
     for (int i = 0; i < strlen(palavrasecreta); i++)
         {
         int achou = jachutou(palavrasecreta[i], chutes, chutesdados);
@@ -53,7 +66,7 @@ void adicionapalavra(){
     scanf(" %c", &resposta);
 
     if(resposta == 'S'){
-        char novapalavra[20];
+        char novapalavra[TAMANHO_PALAVRA];
         printf("Qual a nova palavra? ");
         scanf("%s", novapalavra);
 
@@ -80,7 +93,7 @@ void adicionapalavra(){
 
 }
 
-void escolhepalavrasecreta(char palavrasecreta[20]){
+void escolhepalavrasecreta(char palavrasecreta[TAMANHO_PALAVRA]){
     //sprintf(palavrasecreta, "MELANCIA"); //atribui uma string a um array
     //printf("%s", palavrasecreta); //%s para imprimir um array
     FILE* f;
@@ -104,7 +117,7 @@ void escolhepalavrasecreta(char palavrasecreta[20]){
     fclose(f);
 }
 
-int ganhou(char palavrasecreta[20], char chutes[26], int chutesdados){
+int ganhou(char palavrasecreta[TAMANHO_PALAVRA], char chutes[26], int chutesdados){
     for(int i = 0; i < strlen(palavrasecreta); i++){
         if(!jachutou(palavrasecreta[i], chutes, chutesdados)){
             return 0;
@@ -113,24 +126,28 @@ int ganhou(char palavrasecreta[20], char chutes[26], int chutesdados){
     return 1;
 }
 
-int enforcou(char palavrasecreta[20], char chutes[26], int chutesdados){
+int chuteserros(char palavrasecreta[TAMANHO_PALAVRA], char chutes[26], int chutesdados){
     int erros = 0;
-    for(int i = 0; i < chutesdados; i++){
-        int existe = 0;
-        for(int j = 0; j < strlen(palavrasecreta); j++){
-            if(chutes[i] == palavrasecreta[j]){
-                existe = 1;
-                break;
+        for(int i = 0; i < chutesdados; i++){
+            int existe = 0;
+            for(int j = 0; j < strlen(palavrasecreta); j++){
+                if(chutes[i] == palavrasecreta[j]){
+                    existe = 1;
+                    break;
+                }
             }
+            if(!existe) 
+                erros++;
         }
-        if(!existe) 
-            erros++;
-    }
-    return erros >= 5;
+    return erros;
+}
+
+int enforcou(char palavrasecreta[TAMANHO_PALAVRA], char chutes[26], int chutesdados){
+    return chuteserros(palavrasecreta, chutes, chutesdados) >= 5;
 }
 
 int main(){
-    char palavrasecreta[20];
+    char palavrasecreta[TAMANHO_PALAVRA];
     char chutes[26]; //Um array por essencia já é um ponteiro por isso não precisa do & para
                      //parar ele por uma função
     int chutesdados = 0;
@@ -147,5 +164,39 @@ int main(){
                                 //variavel em escopos diferentes
     } while (!ganhou(palavrasecreta, chutes, chutesdados) && !enforcou(palavrasecreta, chutes, chutesdados));
     
-    adicionapalavra();
+    if(ganhou(palavrasecreta, chutes, chutesdados)){
+        printf("\nParabens, voce ganhou!\n\n");
+
+        printf("       ___________      \n");
+        printf("      '._==_==_=_.'     \n");
+        printf("      .-\\:      /-.    \n");
+        printf("     | (|:.     |) |    \n");
+        printf("      '-|:.     |-'     \n");
+        printf("        \\::.    /      \n");
+        printf("         '::. .'        \n");
+        printf("           ) (          \n");
+        printf("         _.' '._        \n");
+        printf("        '-------'       \n\n");
+    }else{
+        printf("Voce perdeu\n");
+        printf("A palavra era %s", palavrasecreta);
+
+        printf("    _______________         \n");
+        printf("   /               \\       \n"); 
+        printf("  /                 \\      \n");
+        printf("//                   \\/\\  \n");
+        printf("\\|   XXXX     XXXX   | /   \n");
+        printf(" |   XXXX     XXXX   |/     \n");
+        printf(" |   XXX       XXX   |      \n");
+        printf(" |                   |      \n");
+        printf(" \\__      XXX      __/     \n");
+        printf("   |\\     XXX     /|       \n");
+        printf("   | |           | |        \n");
+        printf("   | I I I I I I I |        \n");
+        printf("   |  I I I I I I  |        \n");
+        printf("   \\_             _/       \n");
+        printf("     \\_         _/         \n");
+        printf("       \\_______/           \n");
+    }
+    //adicionapalavra();
 }
